@@ -1,0 +1,777 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vincentius Andriell — Data Science Portfolio</title>
+<meta name="description" content="Vincentius Andriell — Data Science student at BINUS University. Machine learning, deep learning, computer vision, and model deployment.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8fafc;
+    --bg-alt: #f1f5f9;
+    --surface: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --a1: #6366f1;
+    --a2: #06b6d4;
+    --a3: #10b981;
+    --grad: linear-gradient(120deg, var(--a1), var(--a2) 55%, var(--a3));
+    --chip: #eef2ff;
+    --chip-text: #4f46e5;
+    --shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px -8px rgba(15,23,42,.10);
+    --shadow-lg: 0 2px 4px rgba(15,23,42,.04), 0 24px 48px -16px rgba(79,70,229,.25);
+    --code-bg: #0f172a;
+    --max: 1100px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #070b14;
+      --bg-alt: #0b1120;
+      --surface: #0f172a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --line: #1e293b;
+      --a1: #818cf8;
+      --a2: #22d3ee;
+      --a3: #34d399;
+      --chip: #1e1b4b;
+      --chip-text: #a5b4fc;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -8px rgba(0,0,0,.5);
+      --shadow-lg: 0 2px 4px rgba(0,0,0,.3), 0 24px 48px -16px rgba(99,102,241,.35);
+      --code-bg: #020617;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body {
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    background: var(--bg); color: var(--text);
+    line-height: 1.65; -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+  .grad-text { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    transition: background .3s, border-color .3s;
+    border-bottom: 1px solid transparent;
+  }
+  nav.scrolled {
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: blur(12px); border-color: var(--line);
+  }
+  nav .wrap { display: flex; justify-content: space-between; align-items: center; height: 64px; }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; text-decoration: none; letter-spacing: -0.02em;
+  }
+  .logo-mark {
+    width: 34px; height: 34px; border-radius: 10px; background: var(--grad);
+    display: grid; place-items: center; color: #fff; font-size: .85rem; font-weight: 800;
+  }
+  .nav-links { display: flex; gap: 4px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted); font-size: .9rem; font-weight: 500;
+    padding: 6px 12px; border-radius: 8px; transition: color .2s, background .2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); background: var(--bg-alt); }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; padding: 150px 0 110px; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; z-index: -2;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
+    opacity: .7;
+  }
+  .blob { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .45; z-index: -1; animation: float 14s ease-in-out infinite; }
+  .blob.b1 { width: 380px; height: 380px; background: var(--a1); top: -80px; left: -60px; }
+  .blob.b2 { width: 320px; height: 320px; background: var(--a2); top: 120px; right: -80px; animation-delay: -5s; }
+  .blob.b3 { width: 260px; height: 260px; background: var(--a3); bottom: -120px; left: 40%; animation-delay: -9s; opacity: .3; }
+  @keyframes float { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(30px,-25px) scale(1.08); } }
+
+  .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+  .status {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px 6px 10px; border-radius: 999px;
+    background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow);
+    font-size: .82rem; font-weight: 500; color: var(--muted);
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--a3); box-shadow: 0 0 0 0 var(--a3); animation: pulse 2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--a3) 60%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+  .hero h1 {
+    margin-top: 22px; font-size: clamp(2.6rem, 6vw, 4.2rem); line-height: 1.05;
+    letter-spacing: -0.04em; font-weight: 800;
+  }
+  .role { margin-top: 14px; font-size: clamp(1.1rem, 2.4vw, 1.4rem); font-weight: 600; color: var(--muted); min-height: 1.6em; }
+  .role .typed { color: var(--text); }
+  .cursor { display: inline-block; width: 2px; height: 1.1em; background: var(--a1); vertical-align: -3px; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .hero p.lead { margin-top: 20px; font-size: 1.08rem; color: var(--muted); max-width: 54ch; }
+  .actions { margin-top: 34px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 12px; font-weight: 600; font-size: .95rem;
+    text-decoration: none; border: 1px solid var(--line); background: var(--surface);
+    transition: transform .2s, box-shadow .2s, border-color .2s; cursor: pointer;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--muted); }
+  .btn.primary { background: var(--grad); color: #fff; border: none; background-size: 150% 150%; }
+  .btn.primary:hover { box-shadow: var(--shadow-lg); background-position: 100% 0; }
+  .btn svg { width: 18px; height: 18px; }
+  .socials { margin-top: 28px; display: flex; gap: 10px; }
+  .icon-btn {
+    width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+    background: var(--surface); border: 1px solid var(--line); color: var(--muted);
+    transition: color .2s, transform .2s, border-color .2s;
+  }
+  .icon-btn:hover { color: var(--a1); transform: translateY(-2px); border-color: var(--a1); }
+  .icon-btn svg { width: 19px; height: 19px; }
+
+  /* code card */
+  .code-card {
+    background: var(--code-bg); border-radius: 18px; box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(148,163,184,.15); overflow: hidden; position: relative;
+    transform: perspective(1200px) rotateY(-6deg) rotateX(3deg); transition: transform .5s;
+  }
+  .code-card:hover { transform: perspective(1200px) rotateY(0) rotateX(0); }
+  .code-top { display: flex; align-items: center; gap: 7px; padding: 14px 16px; border-bottom: 1px solid rgba(148,163,184,.12); }
+  .code-top span { width: 11px; height: 11px; border-radius: 50%; }
+  .code-top span:nth-child(1) { background: #f87171; }
+  .code-top span:nth-child(2) { background: #fbbf24; }
+  .code-top span:nth-child(3) { background: #34d399; }
+  .code-top em { margin-left: auto; font-style: normal; font-size: .75rem; color: #64748b; }
+  pre { padding: 20px 22px 24px; font-family: "JetBrains Mono", monospace; font-size: .82rem; line-height: 1.8; color: #cbd5e1; overflow-x: auto; }
+  .k { color: #c084fc; } .s { color: #86efac; } .n { color: #fbbf24; } .c { color: #64748b; } .f { color: #67e8f9; }
+  .float-badge {
+    position: absolute; right: -14px; bottom: -18px;
+    background: var(--surface); color: var(--text); border: 1px solid var(--line);
+    border-radius: 14px; padding: 12px 16px; box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 12px; animation: bob 5s ease-in-out infinite;
+  }
+  .float-badge .ico { width: 36px; height: 36px; border-radius: 10px; background: var(--grad); display: grid; place-items: center; color: #fff; }
+  .float-badge .ico svg { width: 18px; height: 18px; }
+  .float-badge b { display: block; font-size: .9rem; }
+  .float-badge small { color: var(--muted); font-size: .75rem; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .code-wrap { position: relative; }
+
+
+  /* ---------- Sections ---------- */
+  section { padding: 110px 0; }
+  section.alt { background: var(--bg-alt); }
+  .section-head { margin-bottom: 52px; max-width: 640px; }
+  .kicker { font-family: "JetBrains Mono", monospace; font-size: .8rem; font-weight: 500; color: var(--a1); letter-spacing: .04em; }
+  .section-head h2 { margin-top: 10px; font-size: clamp(1.9rem, 4vw, 2.7rem); letter-spacing: -0.035em; line-height: 1.15; font-weight: 800; }
+  .section-head p { margin-top: 14px; color: var(--muted); font-size: 1.02rem; }
+
+  /* About */
+  .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 20px;
+    padding: 30px; box-shadow: var(--shadow);
+  }
+  .about-text p { color: var(--muted); font-size: 1.02rem; }
+  .about-text p + p { margin-top: 16px; }
+  .about-text strong { color: var(--text); }
+  .info-list { list-style: none; display: grid; gap: 18px; }
+  .info-list li { display: flex; gap: 14px; align-items: flex-start; }
+  .info-ico {
+    flex: none; width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+    background: var(--chip); color: var(--chip-text);
+  }
+  .info-ico svg { width: 20px; height: 20px; }
+  .info-list b { display: block; font-size: .95rem; }
+  .info-list small { color: var(--muted); font-size: .85rem; }
+  .cert {
+    margin-top: 22px; display: flex; align-items: center; gap: 14px; text-decoration: none;
+    padding: 16px; border-radius: 14px; border: 1px dashed var(--line); transition: border-color .2s, background .2s;
+  }
+  .cert:hover { border-color: #76b900; background: color-mix(in srgb, #76b900 6%, transparent); }
+  .cert .nv { flex: none; width: 42px; height: 42px; border-radius: 12px; background: #76b900; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: .72rem; }
+  .cert b { display: block; font-size: .95rem; }
+  .cert small { color: var(--muted); font-size: .82rem; }
+  .cert .arrow { margin-left: auto; color: var(--muted); }
+
+  /* Projects */
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
+  .filter {
+    font: inherit; font-size: .88rem; font-weight: 600; cursor: pointer;
+    padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--muted); transition: all .2s;
+  }
+  .filter:hover { color: var(--text); }
+  .filter.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .project {
+    position: relative; display: flex; flex-direction: column;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
+    overflow: hidden; box-shadow: var(--shadow); transition: transform .3s, box-shadow .3s, opacity .3s;
+  }
+  .project:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .project.hide { display: none; }
+  .project.featured { grid-column: span 2; display: grid; grid-template-columns: .9fr 1.1fr; }
+  .p-visual {
+    position: relative; min-height: 170px; display: grid; place-items: center; overflow: hidden;
+    color: #fff;
+  }
+  .p-visual svg.art { width: 100%; height: 100%; position: absolute; inset: 0; }
+  .p-visual .p-metric {
+    position: relative; text-align: center; padding: 10px 18px; border-radius: 14px;
+    background: rgba(255,255,255,.16); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.25);
+  }
+  .project.featured .p-metric { position: absolute; right: 22px; bottom: 22px; }
+  .project.featured .p-visual { min-height: 260px; }
+  .p-metric b { display: block; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+  .p-metric small { font-size: .78rem; opacity: .9; }
+  .v-food { background: linear-gradient(135deg, #f97316, #ec4899); }
+  .v-house { background: linear-gradient(135deg, #6366f1, #06b6d4); }
+  .v-crowd { background: linear-gradient(135deg, #8b5cf6, #d946ef); }
+  .v-credit { background: linear-gradient(135deg, #10b981, #0ea5e9); }
+  .p-body { padding: 26px 28px 28px; display: flex; flex-direction: column; flex: 1; }
+  .p-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .pill { font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--chip); color: var(--chip-text); letter-spacing: .02em; }
+  .pill.wip { background: color-mix(in srgb, #f59e0b 16%, transparent); color: #d97706; }
+  .pill.team { background: color-mix(in srgb, #8b5cf6 16%, transparent); color: #8b5cf6; }
+  .project h3 { margin-top: 14px; font-size: 1.3rem; letter-spacing: -0.02em; line-height: 1.3; }
+  .project p.desc { margin-top: 10px; color: var(--muted); font-size: .95rem; }
+  .project ul { margin-top: 14px; list-style: none; display: grid; gap: 8px; }
+  .project li { position: relative; padding-left: 22px; color: var(--muted); font-size: .92rem; }
+  .project li::before {
+    content: ""; position: absolute; left: 2px; top: .62em; width: 8px; height: 8px; border-radius: 3px;
+    background: var(--grad);
+  }
+  .project li strong { color: var(--text); font-weight: 600; }
+  .tags { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-family: "JetBrains Mono", monospace; font-size: .74rem; padding: 4px 10px; border-radius: 8px; background: var(--bg-alt); color: var(--muted); border: 1px solid var(--line); }
+  .p-links { margin-top: auto; padding-top: 20px; display: flex; gap: 18px; }
+  .p-links a { display: inline-flex; align-items: center; gap: 6px; font-size: .88rem; font-weight: 600; color: var(--a1); text-decoration: none; }
+  .p-links a:hover { text-decoration: underline; }
+  .p-links a svg { width: 16px; height: 16px; }
+  .p-links span { font-size: .85rem; color: var(--muted); }
+
+  .more-repos { margin-top: 44px; }
+  .more-repos h3 { font-size: 1rem; margin-bottom: 16px; color: var(--muted); font-weight: 600; }
+  .repo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .repo {
+    display: block; text-decoration: none; padding: 18px; border-radius: 16px;
+    background: var(--surface); border: 1px solid var(--line); transition: border-color .2s, transform .2s;
+  }
+  .repo:hover { border-color: var(--a1); transform: translateY(-3px); }
+  .repo b { display: flex; align-items: center; gap: 8px; font-size: .92rem; }
+  .repo b svg { width: 16px; height: 16px; color: var(--muted); flex: none; }
+  .repo small { display: block; margin-top: 6px; color: var(--muted); font-size: .82rem; }
+  .lang { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: .76rem; color: var(--muted); }
+  .lang i { width: 10px; height: 10px; border-radius: 50%; }
+
+  /* Skills */
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .skill-card h3 { display: flex; align-items: center; gap: 12px; font-size: 1.05rem; }
+  .skill-card .tags { margin-top: 16px; }
+  .skill-card .tag { font-family: inherit; font-size: .82rem; font-weight: 500; padding: 6px 12px; border-radius: 10px; color: var(--text); background: var(--bg-alt); }
+  .skill-card.wide { grid-column: span 3; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .skill-card.wide > div h3 { font-size: .95rem; }
+
+  /* Experience timeline */
+  .timeline { position: relative; display: grid; gap: 22px; }
+  .timeline::before { content: ""; position: absolute; left: 21px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--a1), var(--a2), var(--a3)); opacity: .35; border-radius: 2px; }
+  .t-item { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: 22px; }
+  .t-dot {
+    width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
+    background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); color: var(--a1); z-index: 1;
+  }
+  .t-dot svg { width: 20px; height: 20px; }
+  .t-card { padding: 22px 26px; }
+  .t-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+  .t-head h3 { font-size: 1.08rem; }
+  .t-org { color: var(--muted); font-weight: 500; font-size: .92rem; }
+  .t-date { font-family: "JetBrains Mono", monospace; font-size: .76rem; color: var(--muted); background: var(--bg-alt); padding: 3px 10px; border-radius: 8px; white-space: nowrap; }
+  .t-card ul { margin-top: 10px; padding-left: 18px; color: var(--muted); font-size: .92rem; }
+  .t-card li + li { margin-top: 4px; }
+  .roles { margin-top: 14px; display: grid; gap: 14px; }
+  .roles > div { padding-left: 14px; border-left: 2px solid var(--line); }
+  .roles h4 { font-size: .95rem; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+
+
+  footer { padding: 36px 0 44px; color: var(--muted); font-size: .86rem; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--text); }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal.d1 { transition-delay: .08s; } .reveal.d2 { transition-delay: .16s; } .reveal.d3 { transition-delay: .24s; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .blob, .float-badge, .dot, .cursor { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* Responsive */
+  @media (max-width: 960px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .code-card { transform: none; }
+    .about-grid { grid-template-columns: 1fr; }
+    .project.featured { grid-template-columns: 1fr; }
+    .repo-grid { grid-template-columns: repeat(2, 1fr); }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .skill-card.wide { grid-column: span 2; grid-template-columns: 1fr; gap: 20px; }
+  }
+  @media (max-width: 680px) {
+    .wrap { padding: 0 16px; }
+    .nav-links { display: none; }
+    .hero { padding: 112px 0 90px; }
+    section { padding: 80px 0; }
+    .projects { grid-template-columns: 1fr; }
+    .project.featured { grid-column: span 1; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .skill-card.wide { grid-column: span 1; }
+    .repo-grid { grid-template-columns: 1fr; }
+    .float-badge { right: 8px; }
+    .card { padding: 24px; }
+    .p-body { padding: 22px; }
+    .t-item { grid-template-columns: 1fr; gap: 0; }
+    .t-dot { display: none; }
+    .timeline::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 4h16c1.1 0 2 .9 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2Zm18 2-10 7L2 6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M7 7h10v10"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m-6-6 6 6 6-6"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 10 12 5 2 10l10 5 10-5Zm-16 2v5c3 3 9 3 12 0v-5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 22s8-7.6 8-13a8 8 0 1 0-16 0c0 5.4 8 13 8 13Zm0-10a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2m8-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm14 10v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></symbol>
+  <symbol id="i-brain" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9.5 2A2.5 2.5 0 0 0 7 4.5v.1A3 3 0 0 0 4.5 9a3 3 0 0 0 0 6A3 3 0 0 0 7 19.4v.1a2.5 2.5 0 0 0 5 0V4.5A2.5 2.5 0 0 0 9.5 2Zm5 0A2.5 2.5 0 0 1 17 4.5v.1A3 3 0 0 1 19.5 9a3 3 0 0 1 0 6 3 3 0 0 1-2.5 4.4v.1a2.5 2.5 0 0 1-5 0"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m12 2 10 5-10 5L2 7l10-5Zm-10 10 10 5 10-5M2 17l10 5 10-5"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10Z"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 20h9M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4L16.5 3.5Z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z"/></symbol>
+  <symbol id="i-repo" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15Zm0 0A2.5 2.5 0 0 0 6.5 22H20v-5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M20 6 9 17l-5-5"/></symbol>
+</svg>
+
+<nav id="nav">
+  <div class="wrap">
+    <a href="#top" class="logo"><span class="logo-mark">VA</span>Vincentius</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="status"><span class="dot"></span>Open to internships &amp; collaborations</span>
+      <h1>Hi, I'm <span class="grad-text">Vincentius Andriell</span></h1>
+      <div class="role">Aspiring Data Scientist — <span class="typed" id="typed"></span><span class="cursor"></span></div>
+      <p class="lead">Data Science student at BINUS University. I build and compare ML &amp; deep learning models, care a lot about clean data and leak-free validation, and take models from notebook to a live app.</p>
+      <div class="actions">
+        <a href="#projects" class="btn primary">View my work <svg><use href="#i-down"/></svg></a>
+        <a href="mailto:vincentius.andriell@gmail.com" class="btn">Get in touch</a>
+      </div>
+      <div class="socials">
+        <a class="icon-btn" href="https://github.com/Newone0110" target="_blank" rel="noopener" aria-label="GitHub"><svg><use href="#i-github"/></svg></a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/vincentius-andriell-20ab06326/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg><use href="#i-linkedin"/></svg></a>
+        <a class="icon-btn" href="mailto:vincentius.andriell@gmail.com" aria-label="Email"><svg><use href="#i-mail"/></svg></a>
+      </div>
+    </div>
+
+    <div class="code-wrap">
+      <div class="code-card">
+        <div class="code-top"><span></span><span></span><span></span><em>about_me.py</em></div>
+<pre><span class="k">class</span> <span class="f">DataScientist</span>:
+    name   = <span class="s">"Vincentius Andriell"</span>
+    school = <span class="s">"BINUS University"</span>
+    gpa    = <span class="n">3.62</span>
+
+    stack = [<span class="s">"Python"</span>, <span class="s">"R"</span>, <span class="s">"SQL"</span>,
+             <span class="s">"PyTorch"</span>, <span class="s">"TensorFlow"</span>]
+
+    <span class="k">def</span> <span class="f">workflow</span>(self):
+        <span class="c"># data first, leaks never</span>
+        <span class="k">return</span> [<span class="s">"clean"</span>, <span class="s">"split"</span>,
+                <span class="s">"model"</span>, <span class="s">"explain"</span>,
+                <span class="s">"deploy"</span>]</pre>
+      </div>
+      <div class="float-badge">
+        <div class="ico"><svg><use href="#i-star"/></svg></div>
+        <div><b>NVIDIA Certified</b><small>Fundamentals of Deep Learning</small></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<main>
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">01 — About</span>
+        <h2>From raw data to <span class="grad-text">deployed models</span>.</h2>
+      </div>
+      <div class="about-grid">
+        <div class="card about-text reveal">
+          <p>I'm a <strong>Data Science undergraduate at BINUS University</strong> (5th semester, GPA 3.62/4.00) working toward a career as a Data Scientist.</p>
+          <p>I've built and compared models for <strong>regression, classification, and computer vision</strong> — and I enjoy the less glamorous parts too: scraping and cleaning messy data, catching data leakage, and explaining predictions with SHAP. I've shipped models with <strong>Streamlit</strong> and <strong>AWS SageMaker</strong>, tracked experiments with <strong>MLflow</strong>.</p>
+          <p>Outside of code, I mentor freshmen in BINUS's First Year Program and help run events at the Data Science Club — so I'm comfortable leading, teaching, and presenting.</p>
+        </div>
+        <div class="card reveal d1">
+          <ul class="info-list">
+            <li><span class="info-ico"><svg><use href="#i-cap"/></svg></span><div><b>BINUS University</b><small>Bachelor of Data Science · 2024 – Present</small></div></li>
+            <li><span class="info-ico"><svg><use href="#i-pin"/></svg></span><div><b>Jakarta, Indonesia</b><small>Originally from Bogor</small></div></li>
+            <li><span class="info-ico"><svg><use href="#i-globe"/></svg></span><div><b>Indonesian &amp; English</b><small>Native · Professional working proficiency</small></div></li>
+          </ul>
+          <a class="cert" href="https://learn.nvidia.com/certificates?id=3DEprpGTTiCw9e1C--G_tw" target="_blank" rel="noopener">
+            <span class="nv">NVIDIA</span>
+            <div><b>Fundamentals of Deep Learning</b><small>Certificate of Competency · March 2026</small></div>
+            <svg class="arrow" width="18" height="18"><use href="#i-arrow"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="alt">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">02 — Projects</span>
+        <h2>Selected work</h2>
+        <p>End-to-end projects with a focus on honest evaluation — group-aware splits, leak checks, and metrics that reflect real-world use.</p>
+      </div>
+
+      <div class="filters reveal" role="tablist">
+        <button class="filter active" data-filter="all">All</button>
+        <button class="filter" data-filter="ml">Machine Learning</button>
+        <button class="filter" data-filter="cv">Computer Vision</button>
+        <button class="filter" data-filter="deploy">Deployment</button>
+      </div>
+
+      <div class="projects">
+        <!-- Featured: ingredient detection -->
+        <article class="project featured reveal" data-cat="cv deploy">
+          <div class="p-visual v-food">
+            <svg class="art" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <g fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2.5">
+                <rect x="40" y="40" width="120" height="90" rx="6"/>
+                <rect x="210" y="60" width="140" height="110" rx="6" stroke-dasharray="8 6"/>
+                <rect x="30" y="180" width="120" height="85" rx="6"/>
+              </g>
+              <g fill="rgba(255,255,255,.85)" font-family="JetBrains Mono, monospace" font-size="12">
+                <rect x="40" y="22" width="92" height="18" rx="3" fill="rgba(255,255,255,.25)"/><text x="46" y="35">tomato 0.94</text>
+                <rect x="210" y="42" width="98" height="18" rx="3" fill="rgba(255,255,255,.25)"/><text x="216" y="55">carrot 0.88</text>
+                <rect x="30" y="162" width="84" height="18" rx="3" fill="rgba(255,255,255,.25)"/><text x="36" y="175">egg 0.91</text>
+              </g>
+            </svg>
+            <div class="p-metric"><b>0.808</b><small>mAP@0.5 · 50 classes</small></div>
+          </div>
+          <div class="p-body">
+            <div class="p-meta"><span class="pill">Computer Vision</span><span class="pill wip">In progress</span></div>
+            <h3>Food Ingredient Detection for Menu Recommendation</h3>
+            <p class="desc">A YOLO11 object detector that recognizes 50 ingredients from a fridge or kitchen photo — the core of a web app that suggests recipes from what you already have.</p>
+            <ul>
+              <li><strong>Found data leakage</strong> in the public split (455 photos in multiple splits) and re-split 80/10/10 per original photo, stratified by class.</li>
+              <li><strong>Picked the confidence threshold with F-β (β=1.5)</strong> to favor recall — missing an ingredient hurts more than a false alarm.</li>
+              <li>Reproducible pipeline: per-run configs, training queue, experiment log, unit tests, model card. <strong>166 ms/photo on CPU</strong>.</li>
+            </ul>
+            <div class="tags"><span class="tag">YOLO11</span><span class="tag">PyTorch</span><span class="tag">Roboflow</span><span class="tag">pytest</span><span class="tag">FastAPI</span></div>
+          </div>
+        </article>
+
+        <article class="project reveal" data-cat="ml">
+          <div class="p-visual v-house">
+            <svg class="art" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <g fill="rgba(255,255,255,.22)">
+                <rect x="30" y="120" width="26" height="80"/><rect x="66" y="95" width="26" height="105"/><rect x="102" y="130" width="26" height="70"/>
+                <rect x="290" y="80" width="26" height="120"/><rect x="326" y="110" width="26" height="90"/><rect x="362" y="60" width="26" height="140"/>
+              </g>
+              <polyline points="0,170 60,150 120,155 180,120 240,110 300,80 360,60 400,45" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="3"/>
+            </svg>
+            <div class="p-metric"><b>13.3%</b><small>median error</small></div>
+          </div>
+          <div class="p-body">
+            <div class="p-meta"><span class="pill">Regression</span></div>
+            <h3>Jabodetabek House Price Prediction</h3>
+            <p class="desc">End-to-end price model from 3,553 scraped rumah123.com listings, cleaned down to 3,172 real residential ads.</p>
+            <ul>
+              <li><strong>Group-aware split + GroupKFold</strong> so near-identical re-posted listings never leak across train and test.</li>
+              <li>Tuned XGBoost beat Ridge, RF &amp; LightGBM: <strong>test MAPE 20.3%</strong>. SHAP shows building &amp; land size drive price most.</li>
+            </ul>
+            <div class="tags"><span class="tag">XGBoost</span><span class="tag">LightGBM</span><span class="tag">scikit-learn</span><span class="tag">SHAP</span></div>
+            <div class="p-links"><a href="https://github.com/Newone0110/Housing_Price_Jabodetabek_-Progress-" target="_blank" rel="noopener"><svg><use href="#i-github"/></svg>Source code</a></div>
+          </div>
+        </article>
+
+        <article class="project reveal d1" data-cat="ml deploy">
+          <div class="p-visual v-credit">
+            <svg class="art" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <g fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2">
+                <rect x="40" y="40" width="150" height="95" rx="12"/><rect x="230" y="70" width="150" height="95" rx="12"/>
+              </g>
+              <g fill="rgba(255,255,255,.3)"><rect x="56" y="60" width="30" height="22" rx="4"/><rect x="56" y="105" width="110" height="8" rx="4"/><rect x="246" y="135" width="80" height="8" rx="4"/></g>
+            </svg>
+            <div class="p-metric"><b>0.895</b><small>macro-F1</small></div>
+          </div>
+          <div class="p-body">
+            <div class="p-meta"><span class="pill">Classification</span><span class="pill">Deployed</span></div>
+            <h3>Credit Score Classification &amp; Deployment</h3>
+            <p class="desc">Classifies credit scores (Poor / Standard / Good) on an imbalanced 25,000-row dataset.</p>
+            <ul>
+              <li><strong>OOP pipeline</strong> with separate preprocessing, training &amp; evaluation classes; customer-grouped CV to stop leakage.</li>
+              <li>Experiments tracked in <strong>MLflow</strong>; best model served as a <strong>live Streamlit app</strong> with an AWS SageMaker path.</li>
+            </ul>
+            <div class="tags"><span class="tag">XGBoost</span><span class="tag">MLflow</span><span class="tag">Streamlit</span><span class="tag">SageMaker</span></div>
+            <div class="p-links"><a href="https://github.com/Newone0110/Credit_Classification" target="_blank" rel="noopener"><svg><use href="#i-github"/></svg>Source code</a></div>
+          </div>
+        </article>
+
+        <article class="project reveal" data-cat="cv">
+          <div class="p-visual v-crowd">
+            <svg class="art" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <defs><radialGradient id="hot"><stop offset="0" stop-color="#fde047" stop-opacity=".9"/><stop offset="1" stop-color="#fde047" stop-opacity="0"/></radialGradient></defs>
+              <circle cx="90" cy="70" r="55" fill="url(#hot)"/><circle cx="250" cy="120" r="75" fill="url(#hot)"/><circle cx="350" cy="50" r="40" fill="url(#hot)"/><circle cx="160" cy="160" r="35" fill="url(#hot)"/>
+              <g fill="rgba(255,255,255,.65)"><circle cx="80" cy="60" r="3"/><circle cx="100" cy="78" r="3"/><circle cx="240" cy="110" r="3"/><circle cx="262" cy="128" r="3"/><circle cx="250" cy="140" r="3"/><circle cx="345" cy="48" r="3"/><circle cx="160" cy="158" r="3"/><circle cx="228" cy="98" r="3"/></g>
+            </svg>
+            <div class="p-metric"><b>4,372</b><small>images · 1.5M+ heads</small></div>
+          </div>
+          <div class="p-body">
+            <div class="p-meta"><span class="pill">Deep Learning</span><span class="pill team">Team of 4</span></div>
+            <h3>Crowd Counting with Deep Learning (JHU-Crowd v2.0)</h3>
+            <p class="desc">Density-map regression to count people in dense crowd images, each teammate owning a different architecture.</p>
+            <ul>
+              <li>Built and trained the <strong>MCNN (Multi-Column CNN) baseline</strong> on a shared modeling pipeline.</li>
+              <li>Baseline MAE 248.6 vs. CSRNet 138.0 and UNet-Counter 172.6 — showing <strong>the value of pretrained weights</strong>.</li>
+            </ul>
+            <div class="tags"><span class="tag">CNN</span><span class="tag">MCNN</span><span class="tag">Density maps</span></div>
+          </div>
+        </article>
+
+        <article class="project reveal d1" data-cat="ml">
+          <div class="p-visual v-house" style="background:linear-gradient(135deg,#0ea5e9,#6366f1)">
+            <svg class="art" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <polyline points="0,150 40,140 70,155 110,120 150,130 190,95 230,105 270,70 310,85 350,50 400,60" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="3"/>
+              <polyline points="0,165 40,160 70,170 110,140 150,150 190,120 230,125 270,95 310,105 350,80 400,85" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2" stroke-dasharray="6 6"/>
+            </svg>
+            <div class="p-metric"><b>Time series</b><small>&amp; tabular ML</small></div>
+          </div>
+          <div class="p-body">
+            <div class="p-meta"><span class="pill">Practice</span></div>
+            <h3>More experiments</h3>
+            <p class="desc">Smaller projects where I practice new techniques: stock price forecasting, student placement &amp; salary prediction, and classic classification.</p>
+            <div class="tags"><span class="tag">Time series</span><span class="tag">Pandas</span><span class="tag">scikit-learn</span></div>
+            <div class="p-links"><a href="https://github.com/Newone0110?tab=repositories" target="_blank" rel="noopener"><svg><use href="#i-github"/></svg>All repositories</a></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="more-repos reveal">
+        <h3>Also on GitHub</h3>
+        <div class="repo-grid">
+          <a class="repo" href="https://github.com/Newone0110/Stock_prediction" target="_blank" rel="noopener">
+            <b><svg><use href="#i-repo"/></svg>Stock_prediction</b><small>Forecasting stock prices</small>
+            <span class="lang"><i style="background:#DA5B0B"></i>Jupyter Notebook</span>
+          </a>
+          <a class="repo" href="https://github.com/Newone0110/Student-Placement-Salary-Prediction2" target="_blank" rel="noopener">
+            <b><svg><use href="#i-repo"/></svg>Student-Placement-Salary</b><small>Placement &amp; salary prediction</small>
+            <span class="lang"><i style="background:#3572A5"></i>Python</span>
+          </a>
+          <a class="repo" href="https://github.com/Newone0110/Iris_Classification" target="_blank" rel="noopener">
+            <b><svg><use href="#i-repo"/></svg>Iris_Classification</b><small>Classic classification models</small>
+            <span class="lang"><i style="background:#DA5B0B"></i>Jupyter Notebook</span>
+          </a>
+          <a class="repo" href="https://github.com/Newone0110/TanganJam.com" target="_blank" rel="noopener">
+            <b><svg><use href="#i-repo"/></svg>TanganJam.com</b><small>Web project</small>
+            <span class="lang"><i style="background:#e34c26"></i>HTML</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">03 — Skills</span>
+        <h2>Toolbox</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="card skill-card reveal">
+          <h3><span class="info-ico"><svg><use href="#i-code"/></svg></span>Programming</h3>
+          <div class="tags"><span class="tag">Python</span><span class="tag">R</span><span class="tag">SQL</span><span class="tag">C</span><span class="tag">C++</span></div>
+        </div>
+        <div class="card skill-card reveal d1">
+          <h3><span class="info-ico"><svg><use href="#i-layers"/></svg></span>Machine Learning</h3>
+          <div class="tags"><span class="tag">Pandas</span><span class="tag">NumPy</span><span class="tag">scikit-learn</span><span class="tag">XGBoost</span><span class="tag">Matplotlib</span><span class="tag">SHAP</span><span class="tag">Feature Engineering</span><span class="tag">Statistics</span></div>
+        </div>
+        <div class="card skill-card reveal d2">
+          <h3><span class="info-ico"><svg><use href="#i-brain"/></svg></span>Deep Learning</h3>
+          <div class="tags"><span class="tag">TensorFlow</span><span class="tag">Keras</span><span class="tag">PyTorch</span><span class="tag">CNN</span><span class="tag">LSTM</span><span class="tag">GRU</span><span class="tag">YOLO</span></div>
+        </div>
+        <div class="card skill-card wide reveal">
+          <div>
+            <h3><span class="info-ico"><svg><use href="#i-cloud"/></svg></span>Cloud &amp; Dev Tools</h3>
+            <div class="tags"><span class="tag">AWS SageMaker</span><span class="tag">Streamlit</span><span class="tag">MLflow</span><span class="tag">Docker</span><span class="tag">Git</span><span class="tag">Jupyter</span></div>
+          </div>
+          <div>
+            <h3><span class="info-ico"><svg><use href="#i-pen"/></svg></span>Design</h3>
+            <div class="tags"><span class="tag">Figma</span><span class="tag">Canva</span><span class="tag">SketchUp</span></div>
+          </div>
+          <div>
+            <h3><span class="info-ico"><svg><use href="#i-chat"/></svg></span>Soft Skills</h3>
+            <div class="tags"><span class="tag">Leadership</span><span class="tag">Mentoring</span><span class="tag">Public Speaking</span><span class="tag">Teamwork</span><span class="tag">Event Planning</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="alt">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="kicker">04 — Experience</span>
+        <h2>Leadership &amp; organizations</h2>
+      </div>
+      <div class="timeline">
+        <div class="t-item reveal">
+          <div class="t-dot"><svg><use href="#i-users"/></svg></div>
+          <div class="card t-card">
+            <div class="t-head"><div><h3>Event &amp; Organizer Staff</h3><span class="t-org">Data Science Club (DSC) — BINUS University</span></div><span class="t-date">Sep 2025 – Present</span></div>
+            <ul><li>Plan and organize community events and activities.</li><li>Coordinate logistics and execution so events run smoothly.</li></ul>
+          </div>
+        </div>
+        <div class="t-item reveal">
+          <div class="t-dot"><svg><use href="#i-cap"/></svg></div>
+          <div class="card t-card">
+            <div class="t-head"><div><h3>First Year Program</h3><span class="t-org">BINUS University</span></div><span class="t-date">Aug 2025 – Sep 2026</span></div>
+            <div class="roles">
+              <div><h4>Freshmen Partner (FP) <span class="t-date">Sep 2025 – Sep 2026</span></h4>
+                <ul><li>Mentored freshmen through their first academic year, acting as a personal advisor in regular meetings.</li></ul></div>
+              <div><h4>Freshmen Leader (FL) <span class="t-date">Aug 14 – 21, 2025</span></h4>
+                <ul><li>Led a group of incoming students through FYP orientation as a role model.</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="t-item reveal">
+          <div class="t-dot"><svg><use href="#i-star"/></svg></div>
+          <div class="card t-card">
+            <div class="t-head"><div><h3>KOPASUS IT</h3><span class="t-org">High school IT organization</span></div><span class="t-date">Aug 2021 – May 2023</span></div>
+            <div class="roles">
+              <div><h4>Logistics Division Member <span class="t-date">Jan – May 2023</span></h4>
+                <ul><li>Coordinated major events and served on monthly event committees.</li></ul></div>
+              <div><h4>Head of R&amp;D Division <span class="t-date">May – Dec 2022</span></h4>
+                <ul><li>Led the division's final project presented to all members; supported other divisions' projects.</li></ul></div>
+              <div><h4>Organization Member <span class="t-date">Aug 2021 – May 2022</span></h4>
+                <ul><li>Designed and presented a 3D VR house model.</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> Vincentius Andriell</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+  // Year
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Nav background on scroll + active link
+  const nav = document.getElementById("nav");
+  const links = [...document.querySelectorAll(".nav-links a")];
+  const sections = links.map(a => document.querySelector(a.getAttribute("href")));
+  function onScroll() {
+    nav.classList.toggle("scrolled", scrollY > 20);
+    let cur = -1;
+    sections.forEach((s, i) => { if (s.getBoundingClientRect().top < 120) cur = i; });
+    links.forEach((a, i) => a.classList.toggle("active", i === cur));
+  }
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  // In-page links: scroll with JS so they work everywhere (file://, previews, hosting)
+  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener("click", e => {
+    const id = a.getAttribute("href").slice(1);
+    const target = id ? document.getElementById(id) : null;
+    e.preventDefault();
+    const y = target ? target.getBoundingClientRect().top + scrollY - 64 : 0;
+    scrollTo({ top: y, behavior: reduce ? "auto" : "smooth" });
+  }));
+
+  // Typing effect
+  const words = ["Machine Learning", "Computer Vision", "Deep Learning", "Model Deployment"];
+  const el = document.getElementById("typed");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) { el.textContent = words[0]; }
+  else {
+    let w = 0, c = 0, del = false;
+    (function tick() {
+      const word = words[w];
+      el.textContent = word.slice(0, c);
+      if (!del && c < word.length) c++;
+      else if (del && c > 0) c--;
+      else if (!del) { del = true; return setTimeout(tick, 1600); }
+      else { del = false; w = (w + 1) % words.length; }
+      setTimeout(tick, del ? 45 : 85);
+    })();
+  }
+
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("visible");
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll(".reveal").forEach(n => io.observe(n));
+
+  // Project filters
+  document.querySelectorAll(".filter").forEach(btn => btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter").forEach(b => b.classList.toggle("active", b === btn));
+    const f = btn.dataset.filter;
+    document.querySelectorAll(".project").forEach(p => {
+      p.classList.toggle("hide", f !== "all" && !p.dataset.cat.split(" ").includes(f));
+    });
+  }));
+
+</script>
+</body>
+</html>
